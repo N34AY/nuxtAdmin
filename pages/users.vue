@@ -1,22 +1,25 @@
 <template>
   <v-row>
     <v-col class="text-center">
-      <v-data-table
-        :headers="headers"
-        :items="users"
-        item-key="firstName"
-        class="elevation-1"
-        :search="search"
-      >
-        <template v-slot:top>
-          <v-text-field
-            v-model="search"
-            label="Search"
-            class="mx-4"
-          ></v-text-field>
-        </template>
-        <template v-slot:body.append></template>
-      </v-data-table>
+      <div v-if="users">
+        <v-data-table
+          :headers="headers"
+          :items="users"
+          item-key="firstName"
+          class="elevation-1"
+          :search="search"
+        >
+          <template v-slot:top>
+            <v-text-field
+              v-model="search"
+              label="Search"
+              class="mx-4"
+            ></v-text-field>
+          </template>
+          <template v-slot:body.append></template>
+        </v-data-table>
+      </div>
+      <h2 v-else>Users not found</h2>
     </v-col>
   </v-row>
 </template>
@@ -50,17 +53,7 @@ export default {
           value: 'lastLogin',
         },
       ],
-      users: [
-        {
-          createdAt: 'Sat, 14 Nov 2020 08:50:23 GMT',
-          email: 'admin@admin.com',
-          firstName: 'Admin',
-          id: '5faf9a4f656912ee31f58291',
-          lastLogin: 'Tue, 08 Dec 2020 23:45:26 GMT',
-          lastName: 'Adminov',
-          role: 'admin',
-        },
-      ],
+      users: null,
     }
   },
   mounted: function mountedFunction() {
