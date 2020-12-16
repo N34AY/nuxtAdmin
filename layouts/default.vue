@@ -37,6 +37,9 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <v-btn v-if="this.$auth.loggedIn" icon @click.stop="userLogout">
+        <v-icon>mdi-logout-variant</v-icon>
+      </v-btn>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
@@ -84,8 +87,31 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js',
+      title: 'Admin Dashboard',
     }
+  },
+
+  watch: {
+    title(val) {
+      if (this.$auth.loggedIn)
+        this.title = `Admin Dashboard - ${this.$auth.user.firstName} ${this.$auth.user.lastName}`
+    },
+  },
+
+  methods: {
+    async userLogout() {
+      try {
+        await this.$auth.logout()
+        this.$router.push('/')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    setAppTitle() {
+      if (this.$auth.loggedIn) {
+        this.title = `Admin Dashboard - ${this.$auth.user.firstName} ${this.$auth.user.lastName}`
+      } else this.title = 'Admin Dashboard'
+    },
   },
 }
 </script>

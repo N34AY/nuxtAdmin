@@ -1,6 +1,12 @@
 import colors from 'vuetify/es5/util/colors'
 
+
+
 export default {
+  router: {
+    middleware: ['auth']
+  },
+
   // Disable server-side rendering (https://go.nuxtjs.dev/ssr-mode)
   ssr: false,
 
@@ -37,7 +43,34 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/auth-next',
   ],
+  auth: {
+    strategies: {
+      local: {
+        redirect: {
+          login: '/login',
+          logout: 'login',
+          home: '/'
+        },
+        token: {
+          property: 'token',
+          required: true,
+          type: 'Bearer'
+        },
+        user: {
+          property: 'user',
+          autoFetch: true
+        },
+        endpoints: {
+          login: { url: '/auth/signin', method: 'post' },
+          logout: { url: '/auth/logout', method: 'post' },
+          user: { url: '/auth/user/get', method: 'get' }
+        },
+        maxAge: 21600,
+      }
+    }
+  },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
