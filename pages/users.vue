@@ -77,6 +77,7 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="headline"
@@ -166,12 +167,14 @@ export default {
       lastName: '',
       email: '',
       role: '',
+      active: '',
     },
     defaultItem: {
       firstName: '',
       lastName: '',
       email: '',
       role: '',
+      active: '',
     },
   }),
 
@@ -197,14 +200,7 @@ export default {
   methods: {
     getAllUsers: async function getAllUsersRequest() {
       try {
-        const token =
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDgwNjkyMTIsIm5iZiI6MTYwODA2OTIxMiwianRpIjoiZWI0YWNhMjQtNWZhNi00N2E0LTllM2EtZTE3MGRiYzQzZWZjIiwiZXhwIjoxNjA4MDgwMDEyLCJpZGVudGl0eSI6eyJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MiLCJ1c2VyX2NsYWltcyI6eyJyb2xlIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSJ9fQ.IKehWBkoNtLx9RpsWgcK9MpasrHTgG8xmRu1FCNTSjk'
-        const options = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-        const response = await this.$axios.$get('/users/get/all', options)
+        const response = await this.$axios.$get('/users/get/all')
         this.users = response.users
       } catch (error) {
         this.error = error
@@ -229,20 +225,8 @@ export default {
         this.editedItem
       )
       this.users.splice(this.editedIndex, 1)
-      console.log(this.editedItem)
       try {
-        const token =
-          'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDgwNjkyMTIsIm5iZiI6MTYwODA2OTIxMiwianRpIjoiZWI0YWNhMjQtNWZhNi00N2E0LTllM2EtZTE3MGRiYzQzZWZjIiwiZXhwIjoxNjA4MDgwMDEyLCJpZGVudGl0eSI6eyJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MiLCJ1c2VyX2NsYWltcyI6eyJyb2xlIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSJ9fQ.IKehWBkoNtLx9RpsWgcK9MpasrHTgG8xmRu1FCNTSjk'
-        const options = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-        const response = await this.$axios.$delete(
-          `/users/delete/${this.editedItem.id}`,
-          options
-        )
-        console.log(response)
+        await this.$axios.$delete(`/users/delete/${this.editedItem.id}`)
       } catch (error) {
         this.eror = error
       }
@@ -269,30 +253,34 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem)
         try {
-          const token =
-            'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDgwNjkyMTIsIm5iZiI6MTYwODA2OTIxMiwianRpIjoiZWI0YWNhMjQtNWZhNi00N2E0LTllM2EtZTE3MGRiYzQzZWZjIiwiZXhwIjoxNjA4MDgwMDEyLCJpZGVudGl0eSI6eyJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInJvbGUiOiJhZG1pbiJ9LCJmcmVzaCI6ZmFsc2UsInR5cGUiOiJhY2Nlc3MiLCJ1c2VyX2NsYWltcyI6eyJyb2xlIjoiYWRtaW4iLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSJ9fQ.IKehWBkoNtLx9RpsWgcK9MpasrHTgG8xmRu1FCNTSjk'
           const data = {
             email: this.editedItem.email,
             password: this.editedItem.password,
             firstName: this.editedItem.firstName,
             lastName: this.editedItem.lastName,
+            role: this.editedItem.role,
+            active: this.editedItem.active,
           }
-          const options = {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-          const response = await this.$axios.$put(
-            `/users/update/${this.editedItem.id}`,
-            data,
-            options
-          )
-          console.log(response)
+          await this.$axios.$put(`/users/update/${this.editedItem.id}`, data)
         } catch (error) {
           this.error = error
         }
       } else {
-        this.users.push(this.editedItem)
+        const data = {
+          email: this.editedItem.email,
+          password: this.editedItem.password,
+          firstName: this.editedItem.firstName,
+          lastName: this.editedItem.lastName,
+          role: this.editedItem.role,
+          active: this.editedItem.active,
+        }
+        try {
+          await this.$axios.$post('/users/create', data)
+          this.users.push(this.editedItem)
+        } catch (error) {
+          this.eror = error
+        }
+        this.close()
       }
       this.close()
     },

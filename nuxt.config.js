@@ -1,7 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 
 
-
 export default {
   router: {
     middleware: ['auth']
@@ -50,7 +49,7 @@ export default {
       local: {
         redirect: {
           login: '/login',
-          logout: 'login',
+          logout: '/logout',
           home: '/'
         },
         token: {
