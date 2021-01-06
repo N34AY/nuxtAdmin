@@ -75,19 +75,19 @@ export default {
       items: [
         {
           icon: 'mdi-apps',
-          title: 'Welcome',
+          title: this.$t('header.menu.list.home'),
           to: '/',
         },
         {
           icon: 'mdi-tram',
-          title: 'Users',
+          title: this.$t('header.menu.list.users'),
           to: '/users',
         },
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Admin Dashboard',
+      title: this.$t('header.title'),
     }
   },
 

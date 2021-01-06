@@ -2,19 +2,21 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="4">
       <v-card>
-        <v-card-title class="headline justify-center"> Login </v-card-title>
+        <v-card-title class="headline justify-center">
+          {{ $t('auth.login') }}
+        </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12" sm="12" md="12">
                 <v-text-field
                   v-model="login.email"
-                  label="Email"
+                  :label="$t('auth.email')"
                 ></v-text-field>
                 <v-text-field
                   v-model="login.password"
                   :type="show1 ? 'text' : 'password'"
-                  label="Password"
+                  :label="$t('auth.password')"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -22,7 +24,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" @click="userLogin"> Login </v-btn>
+          <v-btn color="primary" @click="userLogin">
+            {{ $t('auth.login') }}
+          </v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>

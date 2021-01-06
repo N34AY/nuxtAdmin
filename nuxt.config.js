@@ -43,6 +43,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/auth-next',
+    'nuxt-i18n',
   ],
   auth: {
     strategies: {
@@ -69,6 +70,22 @@ export default {
         maxAge: 21600,
       }
     }
+  },
+
+  i18n: {
+    locales: [
+      {
+        code: 'en',
+        file: 'en-US.js'
+      },
+      {
+        code: 'ru',
+        file: 'ru-RU.js'
+      }
+    ],
+    lazy: true,
+    langDir: 'locales/',
+    defaultLocale: 'ru',
   },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
