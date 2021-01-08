@@ -1,5 +1,6 @@
 <template>
   <v-row justify="center" align="center">
+    <notifications group="auth" position="top right" />
     <v-col cols="12" sm="8" md="4">
       <v-card>
         <v-card-title class="headline justify-center">
@@ -45,12 +46,53 @@ export default {
   methods: {
     async userLogin() {
       try {
-        await this.$auth.loginWith('local', { data: this.login })
+        const response = await this.$auth.loginWith('local', {
+          data: this.login,
+        })
+        this.$notify({
+          group: 'auth',
+          type: 'success',
+          title: this.$t('auth.successTitle'),
+          text: response.data.message
+            ? response.data.message[`${this.$i18n.locale}`]
+            : null,
+        })
         this.$router.push('/')
       } catch (error) {
-        console.log(error)
+        this.$notify({
+          group: 'auth',
+          type: 'error',
+          title: this.$t('auth.errorTitle'),
+          text: error.response.data.message
+            ? error.response.data.message[`${this.$i18n.locale}`]
+            : null,
+        })
       }
     },
   },
 }
 </script>
+
+<style lang="sass">
+.vue-notification
+  padding: 10px
+  margin: 0 5px 5px
+
+  font-size: 12px
+
+  color: #ffffff
+  background: #44a4fc
+  border-left: 5px solid #187fe7
+
+  &.warn
+    background: #ffb648
+    border-left-color: #f48a06
+
+  &.error
+    background: #e54d42
+    border-left-color: #b82e24
+
+  &.success
+    background: #68cd86
+    border-left-color: #42a85f
+</style>

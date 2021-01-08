@@ -55,7 +55,7 @@
           <v-list-item-action>
             <v-icon light> mdi-repeat </v-icon>
           </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
+          <v-list-item-title>{{ $t('header.switcher') }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -79,7 +79,7 @@ export default {
           to: '/',
         },
         {
-          icon: 'mdi-tram',
+          icon: 'mdi-account-multiple',
           title: this.$t('header.menu.list.users'),
           to: '/users',
         },
@@ -94,7 +94,9 @@ export default {
   watch: {
     title(val) {
       if (this.$auth.loggedIn)
-        this.title = `Admin Dashboard - ${this.$auth.user.firstName} ${this.$auth.user.lastName}`
+        this.title = `${this.$t('auth.app.title')} ${
+          this.$auth.user.firstName
+        } ${this.$auth.user.lastName}`
     },
   },
 
@@ -102,15 +104,15 @@ export default {
     async userLogout() {
       try {
         await this.$auth.logout()
-        this.$router.push('/')
+        this.$router.push('/login')
       } catch (error) {
         console.log(error)
       }
     },
     setAppTitle() {
       if (this.$auth.loggedIn) {
-        this.title = `Admin Dashboard - ${this.$auth.user.firstName} ${this.$auth.user.lastName}`
-      } else this.title = 'Admin Dashboard'
+        this.title = this.$t('auth.app.title')
+      } else this.title = this.$t('auth.app.title')
     },
   },
 }

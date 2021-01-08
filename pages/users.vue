@@ -5,15 +5,16 @@
     sort-by="calories"
     class="elevation-1"
   >
+    <notifications group="users" position="top right" />
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>Website Users</v-toolbar-title>
+        <v-toolbar-title>{{ $t('usersPage.title') }}</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="40%">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-              New User
+              {{ $t('usersPage.newUserBtn') }}
             </v-btn>
           </template>
           <v-card>
@@ -27,13 +28,13 @@
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
                       v-model="editedItem.firstName"
-                      label="First name"
+                      :label="$t('usersPage.usersTable.name')"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
                       v-model="editedItem.lastName"
-                      label="Last name"
+                      :label="$t('usersPage.usersTable.surname')"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -41,14 +42,14 @@
                   <v-col cols="12" sm="6" md="6">
                     <v-text-field
                       v-model="editedItem.email"
-                      label="Email"
+                      :label="$t('usersPage.usersTable.email')"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-select
                       v-model="editedItem.role"
                       :items="roles"
-                      label="Role"
+                      :label="$t('usersPage.usersTable.role')"
                     ></v-select>
                   </v-col>
                 </v-row>
@@ -57,13 +58,13 @@
                     <v-text-field
                       v-model="editedItem.password"
                       :type="show1 ? 'text' : 'password'"
-                      label="Password"
+                      :label="$t('usersPage.usersTable.password')"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="6">
                     <v-checkbox
                       v-model="editedItem.active"
-                      label="Active"
+                      :label="$t('usersPage.usersTable.active')"
                     ></v-checkbox>
                   </v-col>
                 </v-row>
@@ -72,8 +73,12 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+              <v-btn color="blue darken-1" text @click="close">
+                {{ $t('usersPage.form.cancelBtn') }}
+              </v-btn>
+              <v-btn color="blue darken-1" text @click="save">
+                {{ $t('usersPage.form.saveBtn') }}
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -81,17 +86,16 @@
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="headline"
-              >Are you sure you want to delete {{ editedItem.firstName }}
-              {{ editedItem.lastName }}?</v-card-title
-            >
+              >{{ $t('usersPage.form.deleteText') }}
+            </v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >Cancel</v-btn
-              >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                >Confirm</v-btn
-              >
+              <v-btn color="blue darken-1" text @click="closeDelete">
+                {{ $t('usersPage.form.cancelBtn') }}
+              </v-btn>
+              <v-btn color="blue darken-1" text @click="deleteItemConfirm">
+                {{ $t('usersPage.form.confirmBtn') }}
+              </v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -106,81 +110,84 @@
       <v-simple-checkbox v-model="item.active" disabled></v-simple-checkbox>
     </template>
     <template v-slot:no-data>
-      <h2>Users not found</h2>
-      <p>{{ error }}</p>
+      <h2>{{ $t('usersPage.usersNotFound') }}</h2>
     </template>
   </v-data-table>
 </template>
 
 <script>
 export default {
-  data: () => ({
-    roles: ['admin', 'user'],
-    error: null,
-    dialog: false,
-    dialogDelete: false,
-    headers: [
-      {
-        text: 'Name',
-        align: 'center',
-        sortable: false,
-        value: 'firstName',
+  data: function data() {
+    return {
+      roles: ['admin', 'user'],
+      error: null,
+      dialog: false,
+      dialogDelete: false,
+      headers: [
+        {
+          text: this.$t('usersPage.usersTable.name'),
+          align: 'center',
+          sortable: false,
+          value: 'firstName',
+        },
+        {
+          text: this.$t('usersPage.usersTable.surname'),
+          align: 'center',
+          sortable: false,
+          value: 'lastName',
+        },
+        {
+          text: this.$t('usersPage.usersTable.email'),
+          align: 'center',
+          sortable: false,
+          value: 'email',
+        },
+        {
+          text: this.$t('usersPage.usersTable.role'),
+          align: 'center',
+          value: 'role',
+        },
+        {
+          text: this.$t('usersPage.usersTable.lastLogin'),
+          align: 'center',
+          value: 'lastLogin',
+        },
+        {
+          text: this.$t('usersPage.usersTable.active'),
+          align: 'center',
+          value: 'active',
+        },
+        {
+          text: this.$t('usersPage.usersTable.actions'),
+          align: 'center',
+          value: 'actions',
+          sortable: false,
+        },
+      ],
+      users: [],
+      editedIndex: -1,
+      editedItem: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: '',
+        active: '',
       },
-      {
-        text: 'Surname',
-        align: 'center',
-        sortable: false,
-        value: 'lastName',
+      defaultItem: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: '',
+        active: '',
       },
-      {
-        text: 'Email',
-        align: 'center',
-        sortable: false,
-        value: 'email',
-      },
-      {
-        text: 'Role',
-        align: 'center',
-        value: 'role',
-      },
-      {
-        text: 'Last login',
-        align: 'center',
-        value: 'lastLogin',
-      },
-      {
-        text: 'Active',
-        align: 'center',
-        value: 'active',
-      },
-      {
-        text: 'Actions',
-        align: 'center',
-        value: 'actions',
-        sortable: false,
-      },
-    ],
-    users: [],
-    editedIndex: -1,
-    editedItem: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      role: '',
-      active: '',
-    },
-    defaultItem: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      role: '',
-      active: '',
-    },
-  }),
+    }
+  },
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? 'New User' : 'Edit User'
+      return this.editedIndex === -1
+        ? this.$t('usersPage.form.newUser')
+        : this.$t('usersPage.form.editUser')
     },
   },
 
@@ -203,7 +210,14 @@ export default {
         const response = await this.$axios.$get('/users/get/all')
         this.users = response.users
       } catch (error) {
-        this.error = error
+        this.$notify({
+          group: 'users',
+          type: 'error',
+          title: this.$t('usersPage.errorTitle'),
+          text: error.response.data.message
+            ? error.response.data.message[`${this.$i18n.locale}`]
+            : null,
+        })
       }
     },
 
@@ -228,7 +242,14 @@ export default {
       try {
         await this.$axios.$delete(`/users/delete/${this.editedItem.id}`)
       } catch (error) {
-        this.eror = error
+        this.$notify({
+          group: 'users',
+          type: 'error',
+          title: this.$t('usersPage.errorTitle'),
+          text: error.response.data.message
+            ? error.response.data.message[`${this.$i18n.locale}`]
+            : null,
+        })
       }
       this.closeDelete()
     },
@@ -263,7 +284,14 @@ export default {
           }
           await this.$axios.$put(`/users/update/${this.editedItem.id}`, data)
         } catch (error) {
-          this.error = error
+          this.$notify({
+            group: 'users',
+            type: 'error',
+            title: this.$t('usersPage.errorTitle'),
+            text: error.response.data.message
+              ? error.response.data.message[`${this.$i18n.locale}`]
+              : null,
+          })
         }
       } else {
         const data = {
@@ -278,7 +306,14 @@ export default {
           await this.$axios.$post('/users/create', data)
           this.users.push(this.editedItem)
         } catch (error) {
-          this.eror = error
+          this.$notify({
+            group: 'users',
+            type: 'error',
+            title: this.$t('usersPage.errorTitle'),
+            text: error.response.data.message
+              ? error.response.data.message[`${this.$i18n.locale}`]
+              : null,
+          })
         }
         this.close()
       }
