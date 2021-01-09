@@ -1,6 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
 
-
 export default {
   router: {
     middleware: ['auth']
@@ -80,12 +79,14 @@ export default {
   i18n: {
     locales: [
       {
-        code: 'en',
-        file: 'en-US.js'
+        name: 'English',
+        code: 'us',
+        file: 'us-US.js',
       },
       {
+        name: 'Русский',
         code: 'ru',
-        file: 'ru-RU.js'
+        file: 'ru-RU.js',
       }
     ],
     lazy: true,

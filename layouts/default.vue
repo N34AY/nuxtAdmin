@@ -37,6 +37,7 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <LanguageSelector></LanguageSelector>
       <v-btn v-if="this.$auth.loggedIn" icon @click.stop="userLogout">
         <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
@@ -66,7 +67,13 @@
 </template>
 
 <script>
+import LanguageSelector from '../components/LanguageSelector.vue'
+
 export default {
+  components: {
+    LanguageSelector,
+  },
+
   data() {
     return {
       clipped: false,

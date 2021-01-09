@@ -5,8 +5,8 @@
     sort-by="calories"
     class="elevation-1"
   >
-    <notifications group="users" position="top right" />
     <template v-slot:top>
+      <notifications group="users" position="top right" />
       <v-toolbar flat>
         <v-toolbar-title>{{ $t('usersPage.title') }}</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
@@ -205,7 +205,7 @@ export default {
   },
 
   methods: {
-    getAllUsers: async function getAllUsersRequest() {
+    async getAllUsers() {
       try {
         const response = await this.$axios.$get('/users/get/all')
         this.users = response.users
@@ -233,7 +233,7 @@ export default {
       this.dialogDelete = true
     },
 
-    deleteItemConfirm: async function deleteUser() {
+    async deleteItemConfirm() {
       this.editedItem = Object.assign(
         this.users[this.editedIndex],
         this.editedItem
@@ -270,7 +270,7 @@ export default {
       })
     },
 
-    save: async function saveItem() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.users[this.editedIndex], this.editedItem)
         try {

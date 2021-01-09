@@ -37,12 +37,14 @@
 
 <script>
 export default {
-  data: () => ({
-    login: {
-      email: '',
-      password: '',
-    },
-  }),
+  data: function data() {
+    return {
+      login: {
+        email: '',
+        password: '',
+      },
+    }
+  },
   methods: {
     async userLogin() {
       try {
