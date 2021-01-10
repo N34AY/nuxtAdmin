@@ -1,5 +1,6 @@
 <template>
   <v-app dark>
+    <notifications group="auth" position="top right" />
     <v-navigation-drawer
       v-model="drawer"
       :mini-variant="miniVariant"
@@ -9,7 +10,7 @@
     >
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in menuItems"
           :key="i"
           :to="item.to"
           router
@@ -35,7 +36,7 @@
       <v-btn icon @click.stop="fixed = !fixed">
         <v-icon>mdi-minus</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title" />
+      <v-toolbar-title v-text="appTitle" />
       <v-spacer />
       <LanguageSelector></LanguageSelector>
       <v-btn v-if="this.$auth.loggedIn" icon @click.stop="userLogout">
@@ -79,7 +80,16 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
-      items: [
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      loggedIn: null,
+    }
+  },
+
+  computed: {
+    menuItems() {
+      return [
         {
           icon: 'mdi-apps',
           title: this.$t('header.menu.list.home'),
@@ -90,20 +100,10 @@ export default {
           title: this.$t('header.menu.list.users'),
           to: '/users',
         },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: this.$t('header.title'),
-    }
-  },
-
-  watch: {
-    title(val) {
-      if (this.$auth.loggedIn)
-        this.title = `${this.$t('auth.app.title')} ${
-          this.$auth.user.firstName
-        } ${this.$auth.user.lastName}`
+      ]
+    },
+    appTitle() {
+      return this.$t('app.title')
     },
   },
 
@@ -113,13 +113,15 @@ export default {
         await this.$auth.logout()
         this.$router.push('/login')
       } catch (error) {
-        console.log(error)
+        this.$notify({
+          group: 'auth',
+          type: 'error',
+          title: this.$t('auth.errorTitle'),
+          text: error.response.data.message
+            ? error.response.data.message[`${this.$i18n.locale}`]
+            : null,
+        })
       }
-    },
-    setAppTitle() {
-      if (this.$auth.loggedIn) {
-        this.title = this.$t('auth.app.title')
-      } else this.title = this.$t('auth.app.title')
     },
   },
 }

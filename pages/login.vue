@@ -1,6 +1,5 @@
 <template>
   <v-row justify="center" align="center">
-    <notifications group="auth" position="top right" />
     <v-col cols="12" sm="8" md="4">
       <v-card>
         <v-card-title class="headline justify-center">
